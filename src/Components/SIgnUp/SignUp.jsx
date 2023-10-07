@@ -167,12 +167,14 @@ const SignUp = () => {
                   )}
                   <Form onSubmitCapture={register} className="mx-auto max-w-xs">
                     <input
+                    required
                       className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                       type="text"
                       placeholder="Full Name"
                       onChange={(e) => setName(e.target.value)}
                     />
                     <input
+                    required
                       className="w-full px-8 py-4 mt-5 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                       type="email"
                       placeholder="Email"
@@ -182,6 +184,7 @@ const SignUp = () => {
                     <input
                       className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
                       type="number"
+                      required
                       placeholder="+92-**********0"
                       onChange={(e) => setMobile(e.target.value)}
                     />

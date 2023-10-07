@@ -1,51 +1,49 @@
 import React, { useState } from "react";
-import { collection, addDoc, doc, setDoc } from "firebase/firestore";
+import { collection, addDoc, doc, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../../Firebase/Config";
-import { Form, Input } from "antd";
 
-const initialState = { title: "", description: "", price: "" };
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
+
 const AddData = () => {
-  const [state, setState] = useState(initialState);
-  const handleChange = (e) => {
-    setState({ ...state, [e.target.name]: e.target.value });
-  };
+  const navigate = useNavigate();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [author, setAuthor] = useState("");
+  const [edition, setEdition] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log(state);
-
-    let { title, description, price } = state;
-
-    title = title.trim();
-    description = description.trim();
-    price = Number(price);
-
-    if (title.length < 3) {
-      window.toastify(`title ki length km hai`, "error");
-      return;
-    }
-    if (description.length < 10) {
-      window.toastify(`description ki length km hai`, "error");
-      return;
-    }
-    if (!price || price < 0) {
-      window.toastify(`price km hai`, "error");
-      return;
-    }
-    setIsLoading(true);
-    let productId = Math.random().toString(36).slice(2);
-    let formData = { title, description, price, productId };
-
     try {
-      await setDoc(doc(firestore, "products", productId), formData);
-      console.log("Document written with ID: ", productId);
-      window.toastify(`Document written with ID: ${productId}`, "success");
-    } catch (e) {
-      console.error("Error adding document: ", e);
-      window.toastify(`Error adding document: ${e.message}`, "error");
+      await addDoc(collection(db, "tasks"), {
+        title: title,
+        description: description,
+        completed: false,
+        price: price,
+        author: author,
+        edition: edition,
+        time:Timestamp.now(),
+        created: Timestamp.now(),
+      });
+      toast.success(` the Book ${title} "Successfully Added"`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "colored",
+      });
+      setTimeout(() => {
+        navigate("/view");
+      }, 2000);
+      // onClose()
+    } catch (err) {
+      alert(err);
     }
-
-    setIsLoading(false);
   };
   return (
     <div>
@@ -60,55 +58,77 @@ const AddData = () => {
             className="w-[150px] mx-auto rounded-full"
           />
         </div>
-        <Form
+        <form
           onSubmit={handleSubmit}
-          className="bg-gray-300 p-12 md:mx-auto md:flex  md:w-1/2 md:flex-wrap md:gap-5"
+          style={{
+            backgroundImage:
+              'url("https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8Nnx8fGVufDB8fHx8fA%3D%3D&w=1000&q=80")',
+          }}
+          className=" mx-5 rounded-lg  p-12 md:mx-auto md:flex  md:w-1/2 md:flex-wrap md:gap-5"
         >
-          <Form.Item name="Title" label="Title" required>
-            <Input
-              className="md:w-full  mx-auto "
-              type="text"
-              placeholder="Title"
-              name="title"
-              onChange={handleChange}
-            />
-          </Form.Item>
-          <Form.Item name="description" label="Description" required>
-            <Input
-              type="text"
-              placeholder="description"
-              name="description"
-              onChange={handleChange}
-            />
-          </Form.Item>
-          <Form.Item name="author" label="Author" required>
-            <Input
-              type="text"
-              className="form-control"
-              placeholder="pardeep s sinha"
-              name="author"
-              onChange={handleChange}
-            />
-          </Form.Item>
-          <Form.Item name="edition" label="Edition" required>
-            <Input
-              type="text"
-              className="form-control"
-              placeholder="2nd ---*"
-              name="edition"
-              onChange={handleChange}
-            />
-          </Form.Item>
-          <Form.Item name="price" label="Price" required>
-            <Input
-              type="number"
-              className="form-control"
-              placeholder="price"
-              name="price"
-              onChange={handleChange}
-            />
-          </Form.Item>
-        </Form>
+          <input
+            type="text"
+            placeholder="title"
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            required={true}
+            className="p-2 w-full md:w-2/5 rounded-md my-1 text-blue-500 mb-2 outline-none focus:border-dashed"
+          />
+          <input
+            type="text"
+            placeholder="description"
+            onChange={(e) => {
+              setDescription(e.target.value);
+            }}
+            required={true}
+            className="p-2  w-full md:w-2/5 rounded-md my-1 text-blue-500 mb-2 outline-none focus:border-dashed"
+          />
+          <input
+            type="text"
+            placeholder="author"
+            onChange={(e) => {
+              setAuthor(e.target.value);
+            }}
+            required={true}
+            className="p-2 w-full md:w-2/5 rounded-md my-1 text-blue-500 mb-2 outline-none focus:border-dashed"
+          />
+          <input
+            type="text"
+            placeholder="edition"
+            onChange={(e) => {
+              setEdition(e.target.value);
+            }}
+            required={true}
+            className="p-2 w-full md:w-2/5 rounded-md my-1 text-blue-500 mb-2 outline-none focus:border-dashed"
+          />
+          <input
+            type="number"
+            placeholder="price"
+            onChange={(e) => {
+              setPrice(e.target.value);
+            }}
+            required={true}
+            className="p-2 w-full md:w-2/5 rounded-md my-1 text-blue-500 mb-2 outline-none focus:border-dashed"
+          />
+
+      
+            <button
+              type="submit"
+              className="bg-pink-500 p-1 w-full md:w-4/5 md:mx-auto  md:p-2 md:block  rounded-md text-white text-xl"
+            >
+              Add Book
+            </button>
+            <button
+              onClick={() => {
+                navigate("/view");
+              }}
+              className="bg-blue-500 p-1 w-full md:w-4/5 md:mx-auto  md:p-2 md:block  rounded-md text-white text-xl"
+            >
+              View Record
+            </button>
+     
+        </form>
       </div>
     </div>
   );
