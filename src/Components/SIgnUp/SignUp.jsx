@@ -4,11 +4,13 @@ import { auth, provider, db } from "../../Firebase/Config";
 import { addDoc, collection } from "firebase/firestore";
 import { FcGoogle } from "react-icons/fc";
 import { RxCross1 } from "react-icons/rx";
+import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Form, Input } from "antd";
 const SignUp = () => {
+  const navigate =useNavigate()
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
@@ -47,13 +49,14 @@ const SignUp = () => {
             progress: undefined,
             theme: "colored",
           });
+          setTimeout(()=>{
+            navigate('/login')
+          },2000)
           setName("");
           setEmail("");
           setPassword("");
           setMobile("");
-          setTimeout(() => {
-            navigate("/login");
-          }, 1000);
+      
         });
       })
       .catch((error) => {
@@ -199,7 +202,7 @@ const SignUp = () => {
                           onChange={(e) => setPassword(e.target.value)}
                         />
                     </Form.Item>
-                    <button className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                    <button  className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
                       <svg
                         className="w-6 h-6 -ml-2"
                         fill="none"
@@ -217,7 +220,9 @@ const SignUp = () => {
                     <p className="mt-6 text-xs text-gray-600 text-center">
                       I have already signed up
                       <a
-                        href="#"
+                       onClick={()=>{
+                        navigate('/login')
+                       }}
                         className="border-b border-gray-500 mx-5 border-dotted"
                       >
                         Login

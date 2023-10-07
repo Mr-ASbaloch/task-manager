@@ -5,9 +5,11 @@ import { db, provider, auth } from "../../Firebase/Config";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate=useNavigate()
   //   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,6 +52,10 @@ const Login = () => {
           progress: undefined,
           theme: "colored",
         });
+
+        setTimeout(()=>{
+          navigate('/')
+        }, 2000)
       });
   };
   const logInGoogle = () => {
@@ -172,10 +178,13 @@ const Login = () => {
                     <p className="mt-6 text-xs text-gray-600 text-center">
                       Don't have an account ?
                       <a
-                        href="#"
+                      
                         className="border-b border-gray-500 border-dotted"
+                        onClick={()=>{
+                          navigate("/signup")
+                        }}
                       >
-                        Login
+                        Register
                       </a>
                     </p>
                   </Form>
