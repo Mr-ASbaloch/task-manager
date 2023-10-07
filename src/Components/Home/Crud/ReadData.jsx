@@ -4,9 +4,7 @@ import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 
 import { db } from "../../../Firebase/Config";
-import { data } from "autoprefixer";
-import { Modal, Table } from "antd";
-import { GrUpdate } from "react-icons/gr";
+
 import { FiDelete } from "react-icons/fi";
 import Navbar from "../../Navbar/Navbar";
 import { ToastContainer, toast } from "react-toastify";
@@ -49,7 +47,7 @@ const ReadData = () => {
             <th className="p-2 border-r ">author</th>
             <th className="p-2 border-r ">price $</th>
             <th className="p-2 border-r ">edition</th>
-            <th className="p-2 border-r ">Update</th>
+            {/* <th className="p-2 border-r ">Update</th> */}
             <th className="p-2 border-r ">Delete</th>
           </tr>
           {tasks.map((task, index) => {
@@ -65,10 +63,10 @@ const ReadData = () => {
                   <td className="p-2 border-r  border-b">
                     {task.data.edition}
                   </td>
-                  <td className="p-2 border-r   border-b">
+                  {/* <td className="p-2 border-r   border-b">
                     <GrUpdate />
                     update
-                  </td>
+                  </td> */}
                   <td
                     className="p-2 border-r  border-b"
                     onClick={async () => {
@@ -97,7 +95,7 @@ const ReadData = () => {
                       }
                     }}
                   >
-                    <FiDelete />
+                    <FiDelete className='text-red-900 font-bold text-3xl' />
                   </td>
                 </>
               </tr>
