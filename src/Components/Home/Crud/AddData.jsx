@@ -123,7 +123,7 @@ const AddData = () => {
               onClick={() => {
                 navigate("/view");
               }}
-              className="bg-blue-500 p-1 w-full md:w-4/5 md:mx-auto  md:p-2 md:block  rounded-md text-white text-xl"
+              className="bg-blue-500 p-1 w-full mt-3 md:w-4/5 md:mx-auto  md:p-2 md:block  rounded-md text-white text-xl"
             >
               View Record
             </button>

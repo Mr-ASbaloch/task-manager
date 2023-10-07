@@ -14,8 +14,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ReadData = () => {
   const [tasks, setTasks] = useState([]);
-  const [visible, setVisible] = useState(false);
-  const [editedTask, setEditedTask] = useState(null);
 
   useEffect(() => {
     const q = query(collection(db, "tasks"), orderBy("created", "desc"));
@@ -29,27 +27,6 @@ const ReadData = () => {
     });
   }, []);
   console.log(tasks);
-
-
-  const handleEditClick = (task) => {
-    setEditedTask(task);
-    setVisible(true);
-  };
-  const handleEditOk = async () => {
-    if (editedTask) {
-      const taskDocRef = doc(db, "tasks", editedTask.id);
-      try {
-        await updateDoc(taskDocRef, {
-          title: editedTask.data.title,
-          description: editedTask.data.description,
-        });
-        setVisible(false);
-        // Refresh the data or update state as needed
-      } catch (err) {
-        alert(err);
-      }
-    }
-  };
 
   return (
     // <table key={task.id}>
@@ -88,30 +65,35 @@ const ReadData = () => {
                   <td className="p-2 border-r  border-b">
                     {task.data.edition}
                   </td>
-                  <td
-                    className="p-2 border-r   border-b"
-                    onClick={() => handleEditClick(task)}
-                  >
+                  <td className="p-2 border-r   border-b">
                     <GrUpdate />
+                    update
                   </td>
                   <td
                     className="p-2 border-r  border-b"
                     onClick={async () => {
-                      const taskDocRef = doc(db, "tasks", task.id);
-                      try {
-                        await deleteDoc(taskDocRef);
-                        toast.success("Deleted Successfully ", {
-                          position: "top-right",
-                          autoClose: 1000,
-                          hideProgressBar: false,
-                          closeOnClick: true,
-                          pauseOnHover: true,
-                          draggable: true,
-                          progress: undefined,
-                          theme: "colored",
-                        });
-                      } catch (err) {
-                        alert(err);
+                      // Display a confirmation dialog before deletion
+                      const confirmDeletion = window.confirm(
+                        "Are you sure you want to delete this item?"
+                      );
+
+                      if (confirmDeletion) {
+                        const taskDocRef = doc(db, "tasks", task.id);
+                        try {
+                          await deleteDoc(taskDocRef);
+                          toast.success("Deleted Successfully ", {
+                            position: "top-right",
+                            autoClose: 1000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "colored",
+                          });
+                        } catch (err) {
+                          alert(err);
+                        }
                       }
                     }}
                   >
@@ -123,20 +105,6 @@ const ReadData = () => {
           })}
         </table>
       </div>
-      <Modal
-        title="Edit Task"
-        visible={visible}
-        onOk={handleEditOk}
-        onCancel={() => setVisible(false)}
-      >
-        {editedTask && (
-          <div>
-            <div>Title: {editedTask.data.title}</div>
-            <div>Description: {editedTask.data.description}</div>
-            {/* Add input fields or form elements here for editing */}
-          </div>
-        )}
-      </Modal>
     </>
   );
 };
